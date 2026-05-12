@@ -1,17 +1,559 @@
 ---
+const features = [
+  {
+    icon: "🔒",
+    title: "100% Local & Private",
+    desc: "Your data never leaves your machine. No cloud, no telemetry, no subscriptions. Everything runs on your own hardware.",
+  },
+  {
+    icon: "⚡",
+    title: "GPU Accelerated",
+    desc: "Native Vulkan and CUDA support for AMD, Intel, and NVIDIA GPUs. Falls back to optimized CPU when no GPU is available.",
+  },
+  {
+    icon: "💻",
+    title: "Code Intelligence",
+    desc: "Review, explain, refactor, and generate code. Point it at a file or an entire directory — with structured, actionable output.",
+  },
+  {
+    icon: "📄",
+    title: "Document Analysis",
+    desc: "Chat with PDFs, Word documents, Excel sheets, and CSVs. All processed locally — no upload limits, no third-party servers.",
+  },
+  {
+    icon: "✉️",
+    title: "Email Automation",
+    desc: "AI-drafted personalized emails for your client list via SMTP or SendGrid. The only feature that touches the internet — and only to send your email.",
+  },
+  {
+    icon: "💬",
+    title: "Persistent Sessions",
+    desc: "Named conversation sessions with full history stored in a local SQLite database. Your context, your machine, forever.",
+  },
+];
 
+const roadmap = [
+  { label: "Now", item: "Windows · Vulkan · CUDA · Chat · Code · Docs · Email" },
+  { label: "v1.1", item: "Linux (Ubuntu / Debian / Arch) native builds" },
+  { label: "v1.2", item: "macOS — Apple Silicon & Intel" },
+  { label: "v1.3", item: "Blender add-on — scene description, script generation, asset queries" },
+  { label: "v1.4", item: "Roblox Studio plugin — Lua generation, game logic assistant" },
+  { label: "v1.5", item: "Terminal integration — shell assistant, command explanation, script writer" },
+  { label: "Beyond", item: "IDE plugins · Voice input · Multi-model support · Agent workflows" },
+];
+
+const pricing = [
+  {
+    name: "Free Demo",
+    price: "$0",
+    period: "forever",
+    highlight: false,
+    desc: "Try everything before you buy. All features unlocked with a daily usage cap.",
+    perks: [
+      "All features unlocked",
+      "25 minutes of AI per day",
+      "Vulkan build (AMD · Intel · NVIDIA)",
+      "No account, no credit card",
+      "Upgrade anytime",
+    ],
+    link: "https://patrimony.gumroad.com/l/kszhx",
+    cta: "Download free",
+    ghost: true,
+  },
+  {
+    name: "Full License",
+    price: "$59",
+    period: "one-time",
+    highlight: false,
+    desc: "Everything, forever. No renewals, no server to go down, no subscription that locks your data.",
+    perks: [
+      "All current features, unlimited",
+      "All future v1.x updates included",
+      "Vulkan build (AMD · Intel · NVIDIA)",
+      "No DRM — runs offline, no license server",
+      "Use on up to 3 personal machines",
+    ],
+    link: "https://patrimony.gumroad.com/l/wabpu",
+    cta: "Buy now — $59",
+    ghost: false,
+  },
+  {
+    name: "Full License + Support",
+    price: "$99",
+    period: "one-time",
+    highlight: true,
+    desc: "Same as above, plus direct access to the developer and priority on everything.",
+    perks: [
+      "Everything in Full License",
+      "CUDA + Vulkan builds included",
+      "Priority email support (48h response)",
+      "Early access to v1.1 / v1.2 betas",
+      "Your feedback shapes the roadmap",
+    ],
+    link: "https://patrimony.gumroad.com/l/wksfy",
+    cta: "Buy now — $99",
+    ghost: false,
+  },
+];
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackHorse — Local AI for Professionals</title>
+    <meta name="description" content="A powerful local AI assistant that runs entirely on your machine. No cloud, no subscriptions, no data leaving your hands." />
+    <link rel="icon" type="image/png" href="/blackhorse-landing/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg:      #080808;
+        --surface: #111111;
+        --surface2:#161616;
+        --border:  rgba(255,255,255,0.07);
+        --red:     #dc2626;
+        --text:    rgba(255,255,255,0.85);
+        --muted:   rgba(255,255,255,0.4);
+        --faint:   rgba(255,255,255,0.1);
+      }
+      html { scroll-behavior: smooth; }
+      body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+      /* ── Nav ── */
+      nav {
+        position:fixed; top:0; left:0; right:0; z-index:50;
+        display:flex; align-items:center; justify-content:space-between;
+        padding:0 2rem; height:56px;
+        background:rgba(8,8,8,0.88); backdrop-filter:blur(12px);
+        border-bottom:1px solid var(--border);
+      }
+      .nav-logo { display:flex; align-items:center; gap:0.6rem; font-weight:600; font-size:0.95rem; text-decoration:none; color:var(--text); }
+      .nav-dot { width:8px; height:8px; border-radius:50%; background:var(--red); box-shadow:0 0 8px rgba(220,38,38,0.6); animation:breathe 3s ease-in-out infinite; }
+      @keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+      .nav-links { display:flex; align-items:center; gap:1.5rem; }
+      .nav-links a { font-size:0.82rem; color:var(--muted); text-decoration:none; transition:color .2s; }
+      .nav-links a:hover { color:var(--text); }
+      .btn-nav { font-size:0.82rem; font-weight:600; padding:0.45rem 1rem; border-radius:6px; background:var(--red); color:#fff; text-decoration:none; transition:background .2s; }
+      .btn-nav:hover { background:#b91c1c; }
+
+      /* ── Utilities ── */
+      .wrap { max-width:1100px; margin:0 auto; padding:5rem 1.5rem; }
+      .section-label { font-size:0.72rem; font-family:'JetBrains Mono',monospace; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--red); margin-bottom:1rem; }
+      .section-title { font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; letter-spacing:-0.02em; line-height:1.15; margin-bottom:1rem; }
+      .section-sub { font-size:1rem; color:var(--muted); max-width:520px; line-height:1.7; }
+
+      /* ── Hero ── */
+      .hero {
+        min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+        text-align:center; padding:6rem 1.5rem 4rem; position:relative; overflow:hidden;
+      }
+      .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 55% at 50% 40%, rgba(220,38,38,0.07) 0%, transparent 70%); pointer-events:none; }
+      .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.72rem; font-family:'JetBrains Mono',monospace; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(220,38,38,0.8); background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.2); padding:0.35rem 0.9rem; border-radius:999px; margin-bottom:2rem; }
+      .hero h1 { font-size:clamp(2.8rem,7vw,5.5rem); font-weight:700; line-height:1.08; letter-spacing:-0.03em; margin-bottom:1.5rem; }
+      .hero h1 span { color:var(--red); }
+      .hero p { font-size:clamp(1rem,2vw,1.18rem); color:var(--muted); max-width:560px; margin:0 auto 2.5rem; line-height:1.7; }
+      .hero-actions { display:flex; gap:0.9rem; flex-wrap:wrap; justify-content:center; }
+      .btn-primary { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.9rem; font-weight:600; padding:0.75rem 1.75rem; border-radius:10px; background:var(--red); color:#fff; text-decoration:none; transition:background .2s,transform .15s; }
+      .btn-primary:hover { background:#b91c1c; transform:translateY(-1px); }
+      .btn-secondary { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.9rem; font-weight:500; padding:0.75rem 1.75rem; border-radius:10px; background:transparent; border:1px solid var(--faint); color:var(--muted); text-decoration:none; transition:border-color .2s,color .2s,transform .15s; }
+      .btn-secondary:hover { border-color:rgba(255,255,255,0.25); color:var(--text); transform:translateY(-1px); }
+      .hero-meta { margin-top:3rem; display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; }
+      .hero-meta span { font-size:0.78rem; font-family:'JetBrains Mono',monospace; color:rgba(255,255,255,0.22); letter-spacing:0.05em; }
+
+      /* ── Features ── */
+      .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1px; border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-top:3.5rem; background:var(--border); }
+      .feature-card { background:var(--surface); padding:2rem; transition:background .2s; }
+      .feature-card:hover { background:var(--surface2); }
+      .feature-icon { font-size:1.6rem; margin-bottom:1rem; }
+      .feature-card h3 { font-size:1rem; font-weight:600; margin-bottom:0.5rem; }
+      .feature-card p { font-size:0.88rem; color:var(--muted); line-height:1.65; }
+
+      /* ── Privacy ── */
+      .privacy-block { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:3rem; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; margin-top:5rem; }
+      .privacy-block h2 { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; letter-spacing:-0.02em; line-height:1.2; margin-bottom:1rem; }
+      .privacy-block p { font-size:0.92rem; color:var(--muted); line-height:1.7; }
+      .privacy-pills { display:flex; flex-direction:column; gap:0.75rem; }
+      .pill { display:flex; align-items:center; gap:0.75rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:0.85rem 1.1rem; font-size:0.85rem; }
+      .pill-dot { width:6px; height:6px; border-radius:50%; background:var(--red); flex-shrink:0; }
+
+      /* ── Internet disclosure ── */
+      .disclosure { background:rgba(220,38,38,0.05); border:1px solid rgba(220,38,38,0.15); border-radius:14px; padding:1.75rem 2rem; margin-top:2rem; display:flex; gap:1.25rem; align-items:flex-start; }
+      .disclosure-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+      .disclosure h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.35rem; }
+      .disclosure p { font-size:0.85rem; color:var(--muted); line-height:1.65; }
+
+      /* ── Tech ── */
+      .tech-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1px; border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-top:3rem; background:var(--border); }
+      .tech-card { background:var(--surface); padding:1.75rem 2rem; transition:background .2s; }
+      .tech-card:hover { background:var(--surface2); }
+      .tech-tag { display:inline-block; font-size:0.68rem; font-family:'JetBrains Mono',monospace; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.18); padding:0.2rem 0.6rem; border-radius:4px; margin-bottom:0.75rem; }
+      .tech-card h3 { font-size:1.05rem; font-weight:600; margin-bottom:0.5rem; }
+      .tech-card p { font-size:0.86rem; color:var(--muted); line-height:1.65; }
+      .tech-footer { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-top:1px; background:var(--border); }
+      .tech-footer-item { background:rgba(255,255,255,0.02); padding:1rem 1.5rem; display:flex; flex-direction:column; gap:0.3rem; }
+      .tf-label { font-size:0.68rem; font-family:'JetBrains Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.25); }
+      .tf-val { font-size:0.82rem; color:var(--muted); }
+
+      /* ── Roadmap ── */
+      .roadmap-list { margin-top:3rem; display:flex; flex-direction:column; gap:0; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+      .roadmap-item { display:flex; align-items:center; gap:1.5rem; padding:1.1rem 1.5rem; background:var(--surface); border-bottom:1px solid var(--border); transition:background .2s; }
+      .roadmap-item:last-child { border-bottom:none; }
+      .roadmap-item:hover { background:var(--surface2); }
+      .roadmap-label { font-size:0.72rem; font-family:'JetBrains Mono',monospace; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); min-width:60px; }
+      .roadmap-item span:last-child { font-size:0.9rem; color:var(--muted); }
+
+      /* ── Pricing ── */
+      .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-top:3rem; }
+      .pricing-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; display:flex; flex-direction:column; gap:1rem; position:relative; transition:border-color .2s; }
+      .pricing-card:hover { border-color:rgba(255,255,255,0.15); }
+      .pricing-card.highlight { border-color:rgba(220,38,38,0.4); background:rgba(220,38,38,0.04); }
+      .pricing-card.highlight::before { content:'Best value'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:0.68rem; font-family:'JetBrains Mono',monospace; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); background:var(--bg); border:1px solid rgba(220,38,38,0.3); padding:0.25rem 0.75rem; border-radius:999px; white-space:nowrap; }
+      .pricing-name { font-size:0.8rem; font-family:'JetBrains Mono',monospace; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
+      .pricing-price { display:flex; align-items:baseline; gap:0.4rem; }
+      .pricing-price .amount { font-size:3rem; font-weight:700; letter-spacing:-0.03em; }
+      .pricing-price .period { font-size:0.85rem; color:var(--muted); }
+      .pricing-desc { font-size:0.88rem; color:var(--muted); line-height:1.6; }
+      .pricing-perks { display:flex; flex-direction:column; gap:0.55rem; margin-top:0.5rem; }
+      .perk { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.85rem; }
+      .perk-check { color:var(--red); flex-shrink:0; margin-top:2px; }
+      .pricing-cta { margin-top:auto; padding-top:1.5rem; }
+      .btn-buy { display:block; text-align:center; padding:0.8rem 1.5rem; border-radius:10px; font-weight:600; font-size:0.9rem; text-decoration:none; transition:all .2s; }
+      .btn-buy-primary { background:var(--red); color:#fff; }
+      .btn-buy-primary:hover { background:#b91c1c; }
+      .btn-buy-ghost { background:transparent; border:1px solid var(--faint); color:var(--muted); }
+      .btn-buy-ghost:hover { border-color:rgba(255,255,255,0.25); color:var(--text); }
+
+      /* ── Compliance note ── */
+      .compliance { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:2rem; margin-top:3rem; }
+      .compliance h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.75rem; }
+      .compliance p { font-size:0.85rem; color:var(--muted); line-height:1.7; }
+      .compliance p + p { margin-top:0.75rem; }
+
+      /* ── Download ── */
+      .download-section { text-align:center; padding:5rem 1.5rem; position:relative; overflow:hidden; }
+      .download-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 50% 100%, rgba(220,38,38,0.05) 0%, transparent 70%); pointer-events:none; }
+      .download-cards { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:2.5rem; }
+      .download-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1.5rem 2rem; min-width:200px; text-align:left; text-decoration:none; color:var(--text); transition:border-color .2s,transform .15s; display:flex; flex-direction:column; gap:0.4rem; }
+      .download-card:hover { border-color:rgba(220,38,38,0.35); transform:translateY(-2px); }
+      .dc-label { font-size:0.7rem; font-family:'JetBrains Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); }
+      .dc-title { font-size:1rem; font-weight:600; }
+      .dc-sub { font-size:0.78rem; color:var(--muted); }
+      .download-note { font-size:0.78rem; color:rgba(255,255,255,0.18); font-family:'JetBrains Mono',monospace; margin-top:1.5rem; }
+
+      /* ── Footer ── */
+      footer { border-top:1px solid var(--border); padding:2rem 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; max-width:1100px; margin:0 auto; font-size:0.8rem; color:rgba(255,255,255,0.2); }
+      footer a { color:rgba(255,255,255,0.3); text-decoration:none; }
+      footer a:hover { color:rgba(255,255,255,0.6); }
+
+      @media (max-width:640px) {
+        .nav-links { display:none; }
+        .privacy-block { grid-template-columns:1fr; gap:2rem; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Nav -->
+    <nav>
+      <a href="/" class="nav-logo">
+        <span class="nav-dot"></span>
+        BlackHorse
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#tech">Tech</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#download">Download</a>
+        <a href="https://patrimony.gumroad.com/l/kszhx" target="_blank" rel="noopener" class="btn-nav">Get it free</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">&#x25CF; v1.0 &mdash; Windows &middot; Vulkan &middot; CUDA</div>
+      <h1>AI that runs<br /><span>on your machine.</span></h1>
+      <p>
+        BlackHorse is a local AI assistant built for professionals.
+        Chat, analyze code, review documents, and automate emails &mdash;
+        with zero cloud dependency and zero data leaving your hands.
+      </p>
+      <div class="hero-actions">
+        <a href="https://patrimony.gumroad.com/l/kszhx" target="_blank" rel="noopener" class="btn-primary">
+          Download free demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>
+        <a href="#pricing" class="btn-secondary">See pricing</a>
+      </div>
+      <div class="hero-meta">
+        <span>No subscription</span>
+        <span>&middot;</span>
+        <span>No account</span>
+        <span>&middot;</span>
+        <span>No internet required</span>
+        <span>&middot;</span>
+        <span>Bring your own model</span>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="wrap" id="features">
+      <div class="section-label">Capabilities</div>
+      <h2 class="section-title">Everything you need,<br />nothing you don't.</h2>
+      <p class="section-sub">Built on llama.cpp with native GPU acceleration. Fast, lean, and entirely under your control.</p>
+      <div class="features-grid">
+        {features.map((f) => (
+          <div class="feature-card">
+            <div class="feature-icon">{f.icon}</div>
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Privacy -->
+      <div class="privacy-block" id="privacy">
+        <div>
+          <div class="section-label">Transparency</div>
+          <h2>Your data stays<br />on your machine.</h2>
+          <p style="margin-top:1rem">
+            BlackHorse makes no network connections during normal operation.
+            Conversations, documents, and code are stored in a local SQLite database on your drive.
+            No analytics, no telemetry, no DRM pinging a license server.
+          </p>
+          <div class="disclosure">
+            <div class="disclosure-icon">📡</div>
+            <div>
+              <h4>One exception: Email Automation</h4>
+              <p>
+                The email automation feature connects to your SMTP server or SendGrid API to send emails on your behalf.
+                That is the only outbound connection BlackHorse ever makes &mdash; and only when you explicitly trigger a send.
+                No other feature touches the internet.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="privacy-pills">
+          <div class="pill"><div class="pill-dot"></div>No API keys required for inference</div>
+          <div class="pill"><div class="pill-dot"></div>No telemetry or usage tracking</div>
+          <div class="pill"><div class="pill-dot"></div>No account or login needed</div>
+          <div class="pill"><div class="pill-dot"></div>No DRM — no license server calls</div>
+          <div class="pill"><div class="pill-dot"></div>Works fully offline after setup</div>
+          <div class="pill"><div class="pill-dot"></div>Local SQLite — you own your history</div>
+          <div class="pill"><div class="pill-dot"></div>Open model format (GGUF)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Under the hood -->
+    <div class="wrap" id="tech" style="padding-top:0">
+      <div class="section-label">Under the hood</div>
+      <h2 class="section-title">Not a wrapper.<br />A native stack.</h2>
+      <p class="section-sub">
+        BlackHorse is built from scratch in Rust &mdash; not Electron, not Python, not a thin shell around an existing tool.
+        Every component was chosen for performance, safety, and zero unnecessary dependencies.
+      </p>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-tag">Inference</div>
+          <h3>llama.cpp</h3>
+          <p>
+            The de-facto standard for local LLM inference. Pure C++ with GGUF model support, batched decoding,
+            KV cache reuse, and hardware-specific paths for AVX2, AVX-512, Vulkan, and CUDA.
+            BlackHorse links against it natively &mdash; no subprocess spawning, no IPC overhead.
+          </p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-tag">Backend</div>
+          <h3>Rust + Axum</h3>
+          <p>
+            The entire API server is written in Rust. Memory-safe by design &mdash; no null pointer dereferences,
+            no buffer overflows, no use-after-free. Axum provides async HTTP with zero-cost abstractions.
+            The binary ships as a single self-contained executable with no runtime dependencies.
+          </p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-tag">GPU</div>
+          <h3>Vulkan &amp; CUDA</h3>
+          <p>
+            Vulkan build works on AMD, Intel, and NVIDIA &mdash; any GPU with Vulkan 1.2 support.
+            CUDA build targets NVIDIA exclusively for maximum throughput on RTX/GTX hardware.
+            GPU layers are configurable: offload as many transformer layers as VRAM allows,
+            fall back to CPU for the rest. No all-or-nothing requirement.
+          </p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-tag">Embeddings</div>
+          <h3>fastembed-rs</h3>
+          <p>
+            Document analysis uses a local embedding model (multilingual-e5-small) via fastembed-rs,
+            a Rust-native embedding library. Downloaded once on first use, then cached locally.
+            No external embedding API, no tokens leaving the machine.
+          </p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-tag">Storage</div>
+          <h3>SQLite via sqlx</h3>
+          <p>
+            All conversation history, sessions, and configuration are stored in a single SQLite file
+            on your machine. sqlx provides compile-time verified queries &mdash; no SQL injection,
+            no runtime schema surprises. Migrations run automatically on startup.
+          </p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-tag">Frontend</div>
+          <h3>Neutralino + React</h3>
+          <p>
+            The desktop UI uses Neutralino.js &mdash; a lightweight alternative to Electron that adds
+            roughly 1.7 MB of overhead instead of 100+ MB. The React frontend communicates with the
+            Rust backend over a local HTTP + SSE channel for real-time token streaming.
+          </p>
+        </div>
+      </div>
+
+      <div class="tech-footer">
+        <div class="tech-footer-item">
+          <span class="tf-label">Model format</span>
+          <span class="tf-val">GGUF — any quantization (Q2 to Q8, F16)</span>
+        </div>
+        <div class="tech-footer-item">
+          <span class="tf-label">Binary size</span>
+          <span class="tf-val">~97 MB Vulkan &middot; ~169 MB CUDA (includes shaders / runtime)</span>
+        </div>
+        <div class="tech-footer-item">
+          <span class="tf-label">Memory safety</span>
+          <span class="tf-val">Rust borrow checker &mdash; data races and memory bugs are compile-time errors</span>
+        </div>
+        <div class="tech-footer-item">
+          <span class="tf-label">Source</span>
+          <span class="tf-val">Closed source v1 &middot; EULA-licensed &middot; No obfuscation</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="wrap" id="roadmap" style="padding-top:0">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-title">This is just the beginning.</h2>
+      <p class="section-sub">
+        Every purchase directly funds the next platform. Windows is v1 &mdash;
+        Linux, macOS, Blender, Roblox Studio, and terminal integration are all in active planning.
+      </p>
+      <div class="roadmap-list">
+        {roadmap.map((r) => (
+          <div class="roadmap-item">
+            <span class="roadmap-label">{r.label}</span>
+            <span>{r.item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="wrap" id="pricing" style="padding-top:0">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Pay once. Keep it forever.</h2>
+      <p class="section-sub">
+        No subscription model. No artificial limits that disappear when you stop paying.
+        You buy it, you own it &mdash; including every v1.x update that ships after your purchase.
+      </p>
+      <div class="pricing-grid">
+        {pricing.map((p) => (
+          <div class={`pricing-card ${p.highlight ? "highlight" : ""}`}>
+            <div class="pricing-name">{p.name}</div>
+            <div class="pricing-price">
+              <span class="amount">{p.price}</span>
+              <span class="period">{p.period}</span>
+            </div>
+            <p class="pricing-desc">{p.desc}</p>
+            <div class="pricing-perks">
+              {p.perks.map((perk) => (
+                <div class="perk">
+                  <span class="perk-check">&#x2713;</span>
+                  <span>{perk}</span>
+                </div>
+              ))}
+            </div>
+            <div class="pricing-cta">
+              <a href={p.link} target="_blank" rel="noopener" class={`btn-buy ${p.highlight ? "btn-buy-primary" : p.ghost ? "btn-buy-ghost" : "btn-buy-primary"}`}>
+                {p.cta}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="compliance">
+        <h4>Why should you trust this?</h4>
+        <p>
+          BlackHorse ships without DRM, without a license validation server, and without obfuscated code calling home.
+          The binary is a standalone executable &mdash; you can verify its network activity with any packet sniffer (Wireshark, etc.)
+          and confirm for yourself that the only outbound traffic is the email sends you trigger.
+        </p>
+        <p>
+          We comply with applicable software distribution laws and do not collect any personal data.
+          The EULA is plain English, included with every download, and contains no clauses that grant us access to your machine or your files.
+          Your purchase is a one-time transaction. If we disappeared tomorrow, your copy would keep working forever.
+        </p>
+      </div>
+    </div>
+
+    <!-- Download -->
+    <div class="download-section" id="download">
+      <div class="section-label" style="display:inline-block">Try it free</div>
+      <h2 class="section-title" style="margin-top:0.75rem">Download the demo.</h2>
+      <p class="section-sub" style="margin:0.5rem auto 0">
+        25 minutes of AI per day. All features unlocked. No account, no credit card.
+        Just drop in a GGUF model and go.
+      </p>
+      <div class="download-cards">
+        <a href="https://patrimony.gumroad.com/l/kszhx" target="_blank" rel="noopener" class="download-card">
+          <span class="dc-label">Recommended &mdash; Free</span>
+          <span class="dc-title">Demo &mdash; Vulkan</span>
+          <span class="dc-sub">AMD &middot; Intel &middot; NVIDIA<br/>+ CPU fallback</span>
+        </a>
+        <a href="https://patrimony.gumroad.com/l/wabpu" target="_blank" rel="noopener" class="download-card">
+          <span class="dc-label">Full license &mdash; $59</span>
+          <span class="dc-title">Standard &mdash; Vulkan</span>
+          <span class="dc-sub">Unlimited · AMD · Intel · NVIDIA<br/>+ CPU fallback</span>
+        </a>
+        <a href="https://patrimony.gumroad.com/l/wksfy" target="_blank" rel="noopener" class="download-card">
+          <span class="dc-label">Pro license &mdash; $99</span>
+          <span class="dc-title">Pro &mdash; CUDA + Vulkan</span>
+          <span class="dc-sub">Unlimited · Both builds · Support<br/>NVIDIA RTX / GTX + all GPUs</span>
+        </a>
+      </div>
+      <p class="download-note">Windows 10/11 x64 &middot; VC++ Redistributable 2022 &middot; Bring your own GGUF model</p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <span>&copy; 2026 BlackHorse. Built with Rust &amp; llama.cpp.</span>
+      <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+        <a href="https://github.com/MartinCajiao" target="_blank" rel="noopener" title="GitHub" style="display:flex;align-items:center;gap:0.4rem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/martincajiao/" target="_blank" rel="noopener" title="LinkedIn" style="display:flex;align-items:center;gap:0.4rem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://discord.gg/prc9jgHV6" target="_blank" rel="noopener" title="Discord" style="display:flex;align-items:center;gap:0.4rem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          Discord
+        </a>
+        <a href="mailto:patrmartin7@gmail.com" style="display:flex;align-items:center;gap:0.4rem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </a>
+        <a href="#" style="opacity:0.6">EULA</a>
+      </div>
+    </footer>
+
+  </body>
 </html>
